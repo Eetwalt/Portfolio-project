@@ -7,6 +7,18 @@ export const indexGsapConfig = {
   gsap: gsap,
 
   animateElements: function() {
+    ScrollTrigger.batch(".work-grid-item", {
+      interval: 0.7,
+      batchMax: 3,
+      onEnter: batch => gsap.to(batch, {autoAlpha: 1, stagger: 0.25, overwrite: true}),
+      onLeave: batch => gsap.set(batch, { autoAlpha: 0, overwrite: true }),
+      onEnterBack: batch => gsap.to(batch, {autoAlpha: 1, stagger: 0.25, overwrite: true}),
+      onLeaveBack: batch => gsap.set(batch, { autoAlpha: 0, overwrite: true })
+    });
+
+
+
+
     gsap.from('.u-border', {
       duration: 3,
       width: 0,
