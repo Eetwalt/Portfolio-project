@@ -2,24 +2,32 @@
   "name": "portfolio-project",
   "version": "1.0.0",
   "description": "Personal portfolio project",
-  "main": "index.js",
+  "main": "client/dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "serve": "serve",
-    "build": "esbuild index.ts --bundle --outfile=dist/index.js --watch --minify"
+    "build-index": "esbuild client/src/index.ts --bundle --outfile=client/dist/index.js --watch --minify",
+    "build-sandbox": "esbuild client/src/sandbox.ts --bundle --outfile=client/dist/sandbox.js --watch"
   },
   "author": "Eetu Rantanen",
   "license": "ISC",
   "devDependencies": {
     "@finsweet/tsconfig": "^1.3.1",
+    "@types/node": "^20.2.3",
     "esbuild": "^0.17.19",
     "prettier": "^2.8.8",
     "serve": "^14.2.0"
   },
   "dependencies": {
     "@finsweet/ts-utils": "^0.39.1",
+    "@mailchimp/mailchimp_transactional": "^1.0.50",
+    "@stripe/stripe-js": "^1.53.0",
     "@studio-freight/lenis": "^1.0.12",
+    "body-parser": "^1.20.2",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
     "gsap": "^3.11.5",
-    "particles.js": "^2.0.0"
+    "particles.js": "^2.0.0",
+    "stripe": "^12.6.0"
   }
 }
