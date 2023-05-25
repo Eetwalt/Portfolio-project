@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
   lenisElement.setupLenis();
   lenisElement.setupScrollButtons();
 
-  if (window.matchMedia('(max-width: 992px)').matches) {
+  if (window.matchMedia('(min-width: 992px)').matches) {
     particlesJS('particles-js', particlesJson); {
         return false;
     }
