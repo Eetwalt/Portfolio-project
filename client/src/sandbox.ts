@@ -1,6 +1,11 @@
 import { loadStripe, Stripe } from "@stripe/stripe-js";
+import { globalGsapConfig } from "../utils/globalGsapConfig";
+
+
 
 document.addEventListener("DOMContentLoaded", function () {
+  globalGsapConfig.animateElements();
+
   const registrationForm = document.getElementById("registerform")!;
   const inputs = registrationForm.querySelectorAll(
     "input[required]"
