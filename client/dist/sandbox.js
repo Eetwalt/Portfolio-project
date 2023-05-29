@@ -105,68 +105,83 @@
   };
 
   // client/src/sandbox.ts
-  var registrationForm = document.getElementById("registerform");
-  var inputs = registrationForm.querySelectorAll("input[required]");
-  var privacyCheck = document.querySelector('[kuasi-element="privacy"]');
-  var checkoutButton = document.querySelector('[kuasi-element="stripe-btn"]');
-  var requiredErrorMessage = document.querySelector('[kuasi-element="req-error"]');
-  var email = document.querySelector('[kuasi-element="inputEmail"]');
-  var attendees = document.querySelector('[kuasi-element="quantity"]');
-  var emailValue = email.value;
-  var attendeesValue = attendees.value.trim();
-  checkoutButton.disabled = true;
-  function checkFormValidity() {
-    let isFormValid = true;
-    for (let i = 0; i < inputs.length; i++) {
-      if (!inputs[i].value) {
-        isFormValid = false;
-        break;
-      }
-    }
-    if (!privacyCheck.checked) {
-      isFormValid = false;
-    }
-    checkoutButton.disabled = !isFormValid;
-  }
-  registrationForm.addEventListener("submit", function(event) {
-    event.preventDefault();
-  });
-  for (let i = 0; i < inputs.length; i++) {
-    inputs[i].addEventListener("input", checkFormValidity);
-  }
-  privacyCheck.addEventListener("change", checkFormValidity);
-  checkFormValidity();
-  (async function() {
-    let stripe = await loadStripe("pk_test_51NBZXWC9cXxM6Jw80UIwYVmqpFGBzCIItOfAFRbyDOZ5Lwtk09NpBeP3zAwAj3MKy9sj9ZFHI7o66JgEpWL6UrBK00YiHNC2Xk");
-    checkoutButton.addEventListener("click", function() {
-      checkFormValidity();
-      if (!stripe) {
-        return;
-      }
-      stripe.redirectToCheckout({
-        lineItems: [{
-          price: "price_1NBZuaC9cXxM6Jw8jaLKDIFR",
-          quantity: parseInt(attendees.value)
-        }],
-        mode: "payment",
-        /*
-         * Do not rely on the redirect to the successUrl for fulfilling
-         * purchases, customers may not always reach the success_url after
-         * a successful payment.
-         * Instead use one of the strategies described in
-         * https://stripe.com/docs/payments/checkout/fulfill-orders
-         */
-        successUrl: "https://erport.webflow.io/sandbox",
-        cancelUrl: "https://erport.webflow.io/sandbox",
-        customerEmail: email.value
-      }).then(function(result) {
-        if (result.error) {
-          let displayError = document.getElementById("error-message");
-          if (displayError) {
-            displayError.textContent = result.error.message ?? "An unknown error occurred.";
-          }
+  document.addEventListener("DOMContentLoaded", function() {
+    const registrationForm = document.getElementById("registerform");
+    const inputs = registrationForm.querySelectorAll(
+      "input[required]"
+    );
+    const privacyCheck = document.querySelector(
+      '[kuasi-element="privacy"]'
+    );
+    const checkoutButton = document.querySelector(
+      '[kuasi-element="stripe-btn"]'
+    );
+    let email = document.querySelector(
+      '[kuasi-element="inputEmail"]'
+    );
+    let attendees = document.querySelector(
+      '[kuasi-element="quantity"]'
+    );
+    checkoutButton.disabled = true;
+    function checkFormValidity() {
+      let isFormValid = false;
+      for (let i = 0; i < inputs.length; i++) {
+        if (!inputs[i].value) {
+          isFormValid = false;
+          break;
         }
-      });
+      }
+      if (!privacyCheck.checked) {
+        isFormValid = false;
+      }
+      checkoutButton.disabled = !isFormValid;
+    }
+    registrationForm.addEventListener("submit", function(event) {
+      event.preventDefault();
     });
-  })();
+    for (let i = 0; i < inputs.length; i++) {
+      inputs[i].addEventListener("input", checkFormValidity);
+    }
+    privacyCheck.addEventListener("change", checkFormValidity);
+    checkFormValidity();
+    (async function() {
+      let stripe = await loadStripe(
+        "pk_test_51NBZXWC9cXxM6Jw80UIwYVmqpFGBzCIItOfAFRbyDOZ5Lwtk09NpBeP3zAwAj3MKy9sj9ZFHI7o66JgEpWL6UrBK00YiHNC2Xk"
+      );
+      checkoutButton.addEventListener("click", function() {
+        checkFormValidity();
+        if (!stripe) {
+          return;
+        }
+        stripe.redirectToCheckout({
+          lineItems: [
+            {
+              price: "price_1NBZuaC9cXxM6Jw8jaLKDIFR",
+              quantity: parseInt(attendees.value)
+            }
+          ],
+          mode: "payment",
+          /*
+           * Do not rely on the redirect to the successUrl for fulfilling
+           * purchases, customers may not always reach the success_url after
+           * a successful payment.
+           * Instead use one of the strategies described in
+           * https://stripe.com/docs/payments/checkout/fulfill-orders
+           */
+          successUrl: "https://erport.webflow.io/sandbox",
+          cancelUrl: "https://erport.webflow.io/sandbox",
+          customerEmail: email.value
+        }).then(function(result) {
+          if (result.error) {
+            let displayError = document.getElementById(
+              "error-message"
+            );
+            if (displayError) {
+              displayError.textContent = result.error.message ?? "An unknown error occurred.";
+            }
+          }
+        });
+      });
+    })();
+  });
 })();
